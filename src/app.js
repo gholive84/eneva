@@ -5,7 +5,6 @@
  */
 import { mountHeader } from './components/Header.js';
 import { mountTimeline } from './components/Timeline.js';
-import { mountTimelineVertical } from './components/TimelineVertical.js';
 import { mountHub } from './components/Hub.js';
 import { mountGlossary } from './components/Glossary.js';
 import { createModal } from './components/Modal.js';
@@ -31,24 +30,16 @@ const tooltip = createGlossaryTooltip(document.getElementById('app-tooltip-root'
 tooltip.attach();
 
 // ── Timeline (horizontal) ──────────────────────────────────────────
-const onTimelineSelect = (event) => {
-  modal.open({
-    eyebrow: event.date || event.year,
-    title: event.title,
-    bodyHTML: event.body,
-    media: event.media || []
-  });
-};
-
 mountTimeline(document.getElementById('panel-timeline'), {
   data: timelineData,
-  onSelect: onTimelineSelect
-});
-
-// ── Trajetória (timeline vertical) ─────────────────────────────────
-mountTimelineVertical(document.getElementById('panel-trajetoria'), {
-  data: timelineData,
-  onSelect: onTimelineSelect
+  onSelect: (event) => {
+    modal.open({
+      eyebrow: event.date || event.year,
+      title: event.title,
+      bodyHTML: event.body,
+      media: event.media || []
+    });
+  }
 });
 
 // ── Hub ────────────────────────────────────────────────────────────
@@ -97,6 +88,6 @@ tabsEl.addEventListener('click', (e) => {
 
 // Restaurar aba pelo hash
 const initialTab = (location.hash || '').replace(/^#/, '');
-if (['timeline', 'hub', 'glossary', 'trajetoria'].includes(initialTab)) {
+if (['timeline', 'hub', 'glossary'].includes(initialTab)) {
   activateTab(initialTab);
 }
