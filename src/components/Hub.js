@@ -28,7 +28,9 @@ export function mountHub(container, { points, imageSrc = 'assets/HUB.png', onSel
 
   function nextSeqAfter(seq) {
     const idx = seqList.indexOf(seq);
-    return seqList[(idx + 1) % seqList.length];
+    // Último ponto: ciclo encerra (não volta pro 1).
+    if (idx < 0 || idx >= seqList.length - 1) return null;
+    return seqList[idx + 1];
   }
 
   function handleSelect(point) {
@@ -49,7 +51,7 @@ export function mountHub(container, { points, imageSrc = 'assets/HUB.png', onSel
 
   function drawConnector() {
     if (!svgLine) return;
-    if (lastClickedSeq == null) {
+    if (lastClickedSeq == null || currentPulsingSeq == null) {
       svgLine.style.opacity = '0';
       return;
     }
