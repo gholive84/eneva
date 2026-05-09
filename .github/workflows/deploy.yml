@@ -18,17 +18,17 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: SSH and git pull on Hostinger
-        uses: appleboy/ssh-action@v1.2.0
+      - name: Setup SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
         with:
-          host: ${{ secrets.SSH_HOST }}
-          port: ${{ secrets.SSH_PORT }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          command_timeout: 60s
-          script: |
-            cd /home/u444566027/websites/uOZW4bgwz/public_html
-            echo "→ git pull..."
-            git pull --ff-only
-            echo "→ commit ativo:"
-            git log --oneline -1
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Add Hostinger to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy via git pull
+        run: |
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            'cd /home/u444566027/websites/uOZW4bgwz/public_html && git pull --ff-only && git log --oneline -1'
