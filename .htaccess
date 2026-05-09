@@ -23,6 +23,7 @@ AddType font/woff .woff
   </FilesMatch>
   <FilesMatch "\.(js|mjs|css)$">
     Header set Cache-Control "no-cache, must-revalidate"
+    Header unset Expires
   </FilesMatch>
   <FilesMatch "\.(jpg|jpeg|png|gif|webp|svg|ico)$">
     Header set Cache-Control "public, max-age=604800"
@@ -30,6 +31,11 @@ AddType font/woff .woff
   <FilesMatch "\.(woff|woff2|ttf|otf)$">
     Header set Cache-Control "public, max-age=2592000, immutable"
   </FilesMatch>
+</IfModule>
+
+# Desabilitar cache da CDN da Hostinger (LiteSpeed)
+<IfModule LiteSpeed>
+  CacheDisable *
 </IfModule>
 
 # Bloquear acesso ao .git e arquivos sensíveis
