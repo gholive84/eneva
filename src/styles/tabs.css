@@ -1,0 +1,58 @@
+.app-tabs {
+  display: flex;
+  gap: 4px;
+  margin: 32px 0 24px;
+  border-bottom: 1px solid var(--ink-100);
+  padding-bottom: 0;
+}
+
+.app-tab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-500);
+  background: transparent;
+  border-radius: 10px 10px 0 0;
+  transition: color 0.2s var(--ease), background 0.2s var(--ease);
+  letter-spacing: 0.01em;
+}
+.app-tab:hover { color: var(--eneva-teal-700); background: var(--eneva-teal-50); }
+
+.app-tab .tab-num {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-300);
+  letter-spacing: 0.1em;
+}
+.app-tab.active .tab-num { color: var(--eneva-teal); }
+
+.app-tab.active {
+  color: var(--ink-900);
+  background: #FFFFFF;
+}
+.app-tab.active::after {
+  content: '';
+  position: absolute;
+  left: 14px; right: 14px; bottom: -1px;
+  height: 2px;
+  background: var(--eneva-teal);
+  border-radius: 2px 2px 0 0;
+}
+
+.app-panel { display: none; animation: panel-in 0.4s var(--ease); }
+.app-panel.active { display: block; }
+
+@keyframes panel-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+  .app-tab { padding: 12px 14px; font-size: 13px; }
+  .app-tab .tab-num { display: none; }
+}

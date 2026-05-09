@@ -1,0 +1,413 @@
+/* ── Linha do Tempo Horizontal — Premium ───────────────────────────── */
+.timeline {
+  position: relative;
+  padding: 24px 0 0;
+}
+
+.timeline__head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+}
+.timeline__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--eneva-teal-700);
+  margin-bottom: 12px;
+}
+.timeline__eyebrow::before {
+  content: '';
+  width: 24px; height: 1px;
+  background: var(--eneva-teal);
+}
+.timeline__title {
+  margin: 0;
+  font-size: 44px;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--ink-900);
+  line-height: 1.05;
+}
+.timeline__title em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--eneva-teal) 0%, var(--eneva-teal-700) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+.timeline__subtitle {
+  margin: 12px 0 0;
+  font-size: 16px;
+  color: var(--ink-500);
+  max-width: 540px;
+  line-height: 1.6;
+}
+.timeline__controls {
+  display: flex;
+  gap: 8px;
+}
+.timeline__btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 1px solid var(--ink-100);
+  color: var(--ink-700);
+  display: grid;
+  place-items: center;
+  transition: all 0.25s var(--ease);
+  box-shadow: var(--shadow-sm);
+}
+.timeline__btn:hover:not(:disabled) {
+  border-color: var(--eneva-teal);
+  color: var(--eneva-teal);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.timeline__btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* ── Viewport / Track ──────────────────────────────────────────── */
+.timeline__viewport {
+  position: relative;
+  margin: 0 -24px;
+}
+.timeline__viewport::before,
+.timeline__viewport::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  pointer-events: none;
+  z-index: 4;
+}
+.timeline__viewport::before {
+  left: 0;
+  background: linear-gradient(90deg, var(--bg-soft), transparent);
+}
+.timeline__viewport::after {
+  right: 0;
+  background: linear-gradient(-90deg, var(--bg-soft), transparent);
+}
+
+.timeline__track {
+  position: relative;
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 100px 24px 80px;
+  scroll-behavior: smooth;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+.timeline__track::-webkit-scrollbar { display: none; }
+
+/* Linha contínua com gradiente + progresso */
+.timeline__rail {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  top: 50%;
+  height: 3px;
+  background:
+    repeating-linear-gradient(90deg,
+      var(--ink-100) 0,
+      var(--ink-100) 6px,
+      transparent 6px,
+      transparent 12px
+    );
+  pointer-events: none;
+  z-index: 0;
+  border-radius: 3px;
+}
+.timeline__rail::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--eneva-teal), var(--eneva-teal-700));
+  width: var(--progress, 0%);
+  transition: width 0.4s var(--ease);
+  border-radius: 3px;
+  box-shadow: 0 0 16px rgba(0, 159, 166, 0.3);
+}
+
+/* ── Cada item da timeline ─────────────────────────────────────── */
+.timeline__item {
+  position: relative;
+  flex: 0 0 auto;
+  width: 360px;
+  scroll-snap-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 24px;
+}
+
+/* Cards alternam acima e abaixo do trilho */
+.timeline__card {
+  position: relative;
+  width: 100%;
+  background: #FFFFFF;
+  border: 1px solid var(--ink-100);
+  border-radius: 18px;
+  padding: 0;
+  box-shadow:
+    0 1px 2px rgba(15, 26, 27, 0.04),
+    0 8px 24px rgba(15, 26, 27, 0.06);
+  cursor: pointer;
+  transition:
+    transform 0.4s var(--ease),
+    box-shadow 0.4s var(--ease),
+    border-color 0.3s var(--ease);
+  text-align: left;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.timeline__card:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 1px 2px rgba(15, 26, 27, 0.04),
+    0 24px 48px rgba(15, 26, 27, 0.14),
+    0 0 0 1px var(--eneva-teal);
+  border-color: transparent;
+}
+
+.timeline__item--above .timeline__card { margin-bottom: 80px; }
+.timeline__item--below .timeline__card { margin-top: 80px; order: 2; }
+
+/* Hero da imagem com overlay gradiente para legibilidade */
+.timeline__card-hero {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/10;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--eneva-teal-50), var(--ink-100));
+}
+.timeline__card-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    transparent 45%,
+    rgba(15, 26, 27, 0.25) 75%,
+    rgba(15, 26, 27, 0.55) 100%
+  );
+  pointer-events: none;
+}
+.timeline__card-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s var(--ease);
+}
+.timeline__card:hover .timeline__card-hero-img {
+  transform: scale(1.06);
+}
+
+/* Indicador de mídia no canto da hero */
+.timeline__card-media-flag {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px;
+  background: rgba(15, 26, 27, 0.7);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #FFFFFF;
+  letter-spacing: 0.02em;
+}
+
+/* Corpo do card */
+.timeline__card-body {
+  padding: 18px 22px 22px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.timeline__card-date {
+  display: block;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--eneva-teal-700);
+  margin-bottom: 8px;
+}
+.timeline__card-title {
+  margin: 0 0 8px;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.012em;
+  color: var(--ink-900);
+  line-height: 1.3;
+}
+.timeline__card-summary {
+  margin: 0 0 14px;
+  font-size: 14px;
+  color: var(--ink-500);
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+}
+.timeline__card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--eneva-teal-700);
+  letter-spacing: 0.01em;
+  transition: gap 0.25s var(--ease);
+}
+.timeline__card:hover .timeline__card-cta {
+  gap: 10px;
+}
+.timeline__card-cta svg { transition: transform 0.25s var(--ease); }
+.timeline__card:hover .timeline__card-cta svg { transform: translateX(2px); }
+
+/* Conector vertical card → pin (na rail) */
+.timeline__connector {
+  position: absolute;
+  left: 50%;
+  width: 2px;
+  background: linear-gradient(180deg, var(--ink-200), var(--ink-100));
+  transform: translateX(-50%);
+  transition: background 0.3s var(--ease);
+  z-index: 1;
+}
+.timeline__item--above .timeline__connector { bottom: calc(50% + 18px); height: 36px; }
+.timeline__item--below .timeline__connector { top: calc(50% + 18px); height: 36px; }
+
+/* Node antigo escondido — year-pin agora é o marcador na rail */
+.timeline__node {
+  display: none;
+}
+
+/* Year-pin posicionado EXATAMENTE sobre a rail (centro do item) */
+.timeline__year-pin {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px 8px 12px;
+  background: linear-gradient(135deg, var(--eneva-teal) 0%, var(--eneva-teal-700) 100%);
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: -0.015em;
+  line-height: 1;
+  white-space: nowrap;
+  box-shadow:
+    0 6px 18px rgba(0, 159, 166, 0.35),
+    0 2px 4px rgba(15, 26, 27, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+  transition: transform 0.35s var(--ease-spring), box-shadow 0.35s var(--ease);
+}
+.timeline__year-pin::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 2.5px rgba(255, 255, 255, 0.25);
+  flex-shrink: 0;
+}
+
+/* Estado: ativo (item mais central) */
+.timeline__item.is-active .timeline__connector {
+  background: linear-gradient(180deg, var(--eneva-teal), var(--eneva-teal-700));
+}
+.timeline__item.is-active .timeline__year-pin {
+  transform: translate(-50%, -50%) scale(1.12);
+  box-shadow:
+    0 12px 28px rgba(0, 159, 166, 0.5),
+    0 2px 6px rgba(15, 26, 27, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+.timeline__item.is-active .timeline__card {
+  box-shadow:
+    0 1px 2px rgba(15, 26, 27, 0.04),
+    0 24px 48px rgba(15, 26, 27, 0.14),
+    0 0 0 2px var(--eneva-teal);
+  border-color: transparent;
+}
+
+/* Animação de entrada */
+.timeline__item {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: tl-in 0.7s var(--ease) forwards;
+}
+.timeline__item:nth-child(1) { animation-delay: 0.06s; }
+.timeline__item:nth-child(2) { animation-delay: 0.14s; }
+.timeline__item:nth-child(3) { animation-delay: 0.22s; }
+.timeline__item:nth-child(4) { animation-delay: 0.30s; }
+.timeline__item:nth-child(5) { animation-delay: 0.38s; }
+.timeline__item:nth-child(6) { animation-delay: 0.46s; }
+.timeline__item:nth-child(7) { animation-delay: 0.54s; }
+.timeline__item:nth-child(8) { animation-delay: 0.62s; }
+.timeline__item:nth-child(n+9) { animation-delay: 0.7s; }
+
+@keyframes tl-in {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Indicador de scroll inicial — sutil dica visual */
+.timeline__hint {
+  position: absolute;
+  right: 24px;
+  bottom: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-300);
+  pointer-events: none;
+  opacity: 0;
+  animation: hint-fade 4s var(--ease) 0.6s forwards;
+}
+@keyframes hint-fade {
+  0%   { opacity: 0; transform: translateX(0); }
+  20%  { opacity: 0.9; }
+  60%  { opacity: 0.9; transform: translateX(8px); }
+  100% { opacity: 0; transform: translateX(8px); }
+}
+
+@media (max-width: 720px) {
+  .timeline__title { font-size: 32px; }
+  .timeline__item { width: 300px; }
+  .timeline__card-title { font-size: 17px; }
+}

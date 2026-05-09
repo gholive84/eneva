@@ -1,0 +1,46 @@
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg-soft);
+  color: var(--ink-900);
+  font-family: 'GustanBook', 'Outfit', sans-serif !important;
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  font-family: 'GustanBook', 'Outfit', sans-serif !important;
+}
+button, input, select, textarea {
+  font-family: 'GustanBook', 'Outfit', sans-serif !important;
+}
+
+img { max-width: 100%; display: block; }
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+}
+
+a { color: var(--eneva-teal-700); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.app-main {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+::selection { background: var(--eneva-teal-soft); color: var(--ink-900); }

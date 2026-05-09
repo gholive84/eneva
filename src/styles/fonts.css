@@ -1,0 +1,16 @@
+/* ── GustanBook font face ────────────────────────────────────────────
+ * Coloque os arquivos da família em assets/fonts/:
+ *   - GustanBook.woff2     (peso normal)
+ *   - GustanBook.woff      (fallback antigo, opcional)
+ *
+ * Se outros pesos existirem (Light, Medium, Bold), adicione novos blocos
+ * @font-face com o `font-weight` correspondente.
+ * ──────────────────────────────────────────────────────────────────── */
+@font-face {
+  font-family: 'GustanBook';
+  src: url('../../assets/fonts/GustanBook.woff2') format('woff2'),
+       url('../../assets/fonts/GustanBook.woff') format('woff');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}

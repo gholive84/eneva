@@ -1,0 +1,233 @@
+/* ── HUB Interativo ──────────────────────────────────────────────── */
+.hub {
+  padding: 24px 0 0;
+}
+
+.hub__head {
+  margin-bottom: 28px;
+}
+.hub__title {
+  margin: 0;
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink-900);
+}
+.hub__title em {
+  font-style: normal;
+  color: var(--eneva-teal);
+}
+.hub__subtitle {
+  margin: 8px 0 0;
+  font-size: 15px;
+  color: var(--ink-500);
+  max-width: 640px;
+}
+
+.hub__stage {
+  position: relative;
+  padding: 0;
+}
+
+.hub__canvas {
+  position: relative;
+  margin: 0;
+  width: 1152px;
+  max-width: 100%;
+  aspect-ratio: 1703 / 814;
+}
+
+.hub__image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Hotspots — pontos clicáveis animados */
+.hub__hotspot {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  margin-left: -22px;
+  margin-top: -22px;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: transform 0.25s var(--ease);
+  z-index: 2;
+}
+.hub__hotspot:hover { transform: scale(1.1); }
+
+.hub__hotspot-dot {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--eneva-teal);
+  border: 3px solid #FFFFFF;
+  box-shadow: 0 4px 12px rgba(0, 159, 166, 0.5);
+  display: grid;
+  place-items: center;
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 700;
+  z-index: 3;
+}
+
+.hub__hotspot-pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--eneva-teal);
+  opacity: 0;
+  z-index: 1;
+}
+.hub__hotspot-pulse--delay {
+  opacity: 0;
+}
+
+/* Pulso ativo APENAS no hotspot atual da sequência (.is-pulsing).
+ * Os demais permanecem clicáveis, sem animação. */
+.hub__hotspot.is-pulsing .hub__hotspot-pulse {
+  opacity: 0.55;
+  animation: hub-pulse 2s var(--ease) infinite;
+}
+.hub__hotspot.is-pulsing .hub__hotspot-pulse--delay {
+  opacity: 0.35;
+  animation: hub-pulse 2s var(--ease) infinite;
+  animation-delay: 1s;
+}
+
+/* Último ponto clicado fica destacado (origem da linha) */
+.hub__hotspot.is-clicked .hub__hotspot-dot {
+  background: var(--eneva-teal-700);
+  box-shadow: 0 4px 14px rgba(3, 120, 124, 0.55);
+  transform: scale(1.05);
+}
+.hub__list-item.is-clicked {
+  border-color: var(--eneva-teal-soft);
+  background: var(--eneva-teal-50);
+}
+.hub__list-item.is-clicked .hub__list-num {
+  background: var(--eneva-teal-700);
+}
+
+/* Card lateral do próximo ponto ganha anel teal */
+.hub__list-item.is-pulsing {
+  border-color: var(--eneva-teal);
+  box-shadow: 0 0 0 3px var(--eneva-teal-soft);
+}
+
+/* ── Linha pontilhada conectora ──────────────────────────────── */
+.hub__connector-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: visible;
+}
+.hub__connector-line {
+  fill: none;
+  stroke: var(--eneva-teal);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 0 9;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 0 4px rgba(0, 159, 166, 0.45));
+  transition: opacity 0.3s var(--ease);
+  animation: hub-dash 1.2s linear infinite;
+}
+@keyframes hub-dash {
+  to { stroke-dashoffset: -18; }
+}
+
+@keyframes hub-pulse {
+  0%   { transform: scale(0.6); opacity: 0.6; }
+  70%  { transform: scale(2.2); opacity: 0; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+/* Tooltip flutuante (preview no hover) */
+.hub__hotspot-tip {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 12px);
+  transform: translateX(-50%) translateY(4px);
+  padding: 8px 12px;
+  background: var(--ink-900);
+  color: #FFFFFF;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  border-radius: var(--radius-sm);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s var(--ease), transform 0.18s var(--ease);
+  z-index: 10;
+}
+.hub__hotspot-tip::after {
+  content: '';
+  position: absolute;
+  top: 100%; left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--ink-900);
+}
+.hub__hotspot:hover .hub__hotspot-tip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Lista lateral / cards de pontos (resumo) */
+.hub__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 24px;
+}
+.hub__list-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  background: #FFFFFF;
+  border: 1px solid var(--ink-100);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+  text-align: left;
+}
+.hub__list-item:hover {
+  border-color: var(--eneva-teal);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+.hub__list-num {
+  flex: 0 0 28px;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--eneva-teal);
+  color: #FFFFFF;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 700;
+}
+.hub__list-content h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink-900);
+}
+.hub__list-content p {
+  margin: 2px 0 0;
+  font-size: 12.5px;
+  color: var(--ink-500);
+  line-height: 1.5;
+}

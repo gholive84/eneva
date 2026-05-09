@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Eneva · Intranet · Módulos</title>
+  <link rel="icon" type="image/png" href="assets/logointranet.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="src/styles/fonts.css" />
+  <link rel="stylesheet" href="src/styles/tokens.css" />
+  <link rel="stylesheet" href="src/styles/base.css" />
+  <link rel="stylesheet" href="src/styles/header.css" />
+  <link rel="stylesheet" href="src/styles/tabs.css" />
+  <link rel="stylesheet" href="src/styles/modal.css" />
+  <link rel="stylesheet" href="src/styles/timeline.css" />
+  <link rel="stylesheet" href="src/styles/timeline-vertical.css" />
+  <link rel="stylesheet" href="src/styles/hub.css" />
+  <link rel="stylesheet" href="src/styles/glossary.css" />
+</head>
+<body>
+  <div id="app-header"></div>
+
+  <main class="app-main">
+    <nav class="app-tabs" role="tablist" id="app-tabs">
+      <button class="app-tab active" role="tab" data-tab="hub" aria-selected="true">
+        <span class="tab-num">01</span>
+        <span class="tab-label">Hub</span>
+      </button>
+      <button class="app-tab" role="tab" data-tab="glossary" aria-selected="false">
+        <span class="tab-num">02</span>
+        <span class="tab-label">Glossário</span>
+      </button>
+      <button class="app-tab" role="tab" data-tab="timeline" aria-selected="false">
+        <span class="tab-num">03</span>
+        <span class="tab-label">Linha do Tempo</span>
+      </button>
+      <button class="app-tab" role="tab" data-tab="trajetoria" aria-selected="false">
+        <span class="tab-num">04</span>
+        <span class="tab-label">Trajetória</span>
+      </button>
+    </nav>
+
+    <section class="app-panel active" data-panel="hub" id="panel-hub"></section>
+    <section class="app-panel" data-panel="glossary" id="panel-glossary"></section>
+    <section class="app-panel" data-panel="timeline" id="panel-timeline"></section>
+    <section class="app-panel" data-panel="trajetoria" id="panel-trajetoria"></section>
+  </main>
+
+  <div id="app-modal-root"></div>
+  <div id="app-tooltip-root"></div>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>
