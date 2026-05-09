@@ -9,3 +9,6 @@ Thumbs.db
 dist/
 build/
 .deploy-tools/
+# Webhook — secret e log nunca devem ir pro repo
+.eneva-webhook-secret
+.eneva-webhook.log

@@ -3,10 +3,10 @@
  * GitHub webhook — auto-deploy do branch main para o servidor Hostinger.
  *
  * Setup:
- *   1) Gere o secret (qualquer string aleatória forte) e salve em
- *      /home/u444566027/.eneva-webhook-secret  (fora do public_html, sem extensão).
- *      Ex: openssl rand -hex 32 > /home/u444566027/.eneva-webhook-secret
- *           chmod 600 /home/u444566027/.eneva-webhook-secret
+ *   1) Gere o secret e salve em public_html/.eneva-webhook-secret
+ *      (dotfile bloqueado pelo .htaccess; ignored pelo .gitignore).
+ *      Ex: printf '%s' "<secret>" > public_html/.eneva-webhook-secret
+ *           chmod 600 public_html/.eneva-webhook-secret
  *
  *   2) Configure no GitHub (Settings > Webhooks > Add):
  *        - Payload URL: https://white-porpoise-733348.hostingersite.com/webhook.php
@@ -28,9 +28,11 @@ declare(strict_types=1);
 
 // ── Config ──────────────────────────────────────────────────────────
 $REPO_DIR    = __DIR__; // public_html
-$SECRET_FILE = '/home/u444566027/.eneva-webhook-secret';
-$LOG_FILE    = '/home/u444566027/eneva-webhook.log';
+$SECRET_FILE = __DIR__ . '/.eneva-webhook-secret';
+$LOG_FILE    = __DIR__ . '/.eneva-webhook.log';
 $ALLOW_REF   = 'refs/heads/main';
+// Os dois arquivos começam com "." e são bloqueados pelo .htaccess
+// (FilesMatch "^\." → Require all denied)
 
 // ── Helpers ─────────────────────────────────────────────────────────
 header('Content-Type: application/json');
