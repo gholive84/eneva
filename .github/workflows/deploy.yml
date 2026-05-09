@@ -27,8 +27,14 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan -p ${{ secrets.SSH_PORT }} -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          echo "known_hosts:"
+          cat ~/.ssh/known_hosts | head -3
+          echo "ssh-add -l:"
+          ssh-add -l || true
 
-      - name: Deploy via git pull
+      - name: Deploy via git pull (verbose)
         run: |
-          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
-            'cd /home/u444566027/websites/uOZW4bgwz/public_html && git pull --ff-only && git log --oneline -1'
+          ssh -vvv -o StrictHostKeyChecking=no -o BatchMode=yes \
+              -p ${{ secrets.SSH_PORT }} \
+              ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+              'cd /home/u444566027/websites/uOZW4bgwz/public_html && git pull --ff-only && git log --oneline -1'
