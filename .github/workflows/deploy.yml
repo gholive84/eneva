@@ -1,0 +1,34 @@
+name: Deploy to Hostinger
+
+# Roda automaticamente em todo push para main + permite disparo manual.
+# Hostinger desabilita shell_exec/exec/system no PHP, então não dá pra usar
+# webhook PHP. A GitHub Action SSH-a no servidor e roda git pull lá.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Apenas um deploy por vez; cancela jobs antigos se um novo push chegar
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH and git pull on Hostinger
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          command_timeout: 60s
+          script: |
+            cd /home/u444566027/websites/uOZW4bgwz/public_html
+            echo "→ git pull..."
+            git pull --ff-only
+            echo "→ commit ativo:"
+            git log --oneline -1

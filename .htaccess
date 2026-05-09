@@ -37,6 +37,3 @@ RedirectMatch 404 /\.git
 <FilesMatch "^\.">
   Require all denied
 </FilesMatch>
-<Files "webhook.log">
-  Require all denied
-</Files>
