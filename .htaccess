@@ -1,0 +1,42 @@
+# Eneva Intranet — config Apache/Hostinger
+DirectoryIndex index.html
+
+# MIME types corretos para ES Modules e fontes
+AddType application/javascript .js .mjs
+AddType text/css .css
+AddType application/json .json
+AddType image/svg+xml .svg
+AddType font/woff2 .woff2
+AddType font/woff .woff
+
+# Gzip / Deflate
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml
+</IfModule>
+
+# Cache:
+# - HTML, JS, CSS revalidam SEMPRE (servidor responde 304 se não mudou)
+# - Imagens e fontes ficam em cache mais agressivo (raramente mudam)
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|htm)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+  <FilesMatch "\.(js|mjs|css)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+  <FilesMatch "\.(jpg|jpeg|png|gif|webp|svg|ico)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+  <FilesMatch "\.(woff|woff2|ttf|otf)$">
+    Header set Cache-Control "public, max-age=2592000, immutable"
+  </FilesMatch>
+</IfModule>
+
+# Bloquear acesso ao .git e arquivos sensíveis
+RedirectMatch 404 /\.git
+<FilesMatch "^\.">
+  Require all denied
+</FilesMatch>
+<Files "webhook.log">
+  Require all denied
+</Files>
