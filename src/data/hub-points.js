@@ -20,8 +20,8 @@ export const hubPoints = [
   {
     id: 'upstream',
     seq: 1,
-    x: 26,
-    y: 32,
+    x: 42,
+    y: 23,
     label: 'Upstream · Exploração e Produção',
     title: 'Upstream — onde tudo começa',
     summary: 'Exploração e produção de gás natural em campos próprios.',
@@ -35,8 +35,8 @@ export const hubPoints = [
   {
     id: 'midstream',
     seq: 2,
-    x: 42,
-    y: 55,
+    x: 58,
+    y: 33,
     label: 'Midstream · Logística e Transporte',
     title: 'Midstream — a ponte energética',
     summary: 'Tratamento, transporte e logística do gás até as usinas.',
@@ -50,8 +50,8 @@ export const hubPoints = [
   {
     id: 'downstream',
     seq: 3,
-    x: 58,
-    y: 72,
+    x: 52,
+    y: 55,
     label: 'Downstream · Geração e Comercialização',
     title: 'Downstream — energia que move o Brasil',
     summary: 'Geração térmica a gás e comercialização de energia.',
@@ -65,7 +65,7 @@ export const hubPoints = [
   {
     id: 'renovaveis',
     seq: 4,
-    x: 47,
+    x: 67,
     y: 80,
     label: 'Renováveis · Solar e Eólica',
     title: 'Renováveis — diversificação da matriz',
@@ -79,8 +79,8 @@ export const hubPoints = [
   {
     id: 'logistica-maritima',
     seq: 5,
-    x: 70,
-    y: 22,
+    x: 24,
+    y: 66,
     label: 'Logística Marítima · GNL',
     title: 'Logística marítima — alcance global',
     summary: 'Importação e movimentação de GNL via terminais marítimos.',
@@ -93,8 +93,8 @@ export const hubPoints = [
   {
     id: 'comercializacao',
     seq: 6,
-    x: 80,
-    y: 65,
+    x: 23,
+    y: 86,
     label: 'Comercialização · ACL e ACR',
     title: 'Comercialização — energia até o cliente',
     summary: 'Venda de energia em leilões regulados e contratos no mercado livre.',

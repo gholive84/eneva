@@ -46,7 +46,7 @@ mountTimeline(document.getElementById('panel-timeline'), {
 let hubInstance;
 hubInstance = mountHub(document.getElementById('panel-hub'), {
   points: hubPoints,
-  imageSrc: 'assets/hub-eneva.png',
+  imageSrc: 'assets/hub-jpg-menor.jpg',
   onSelect: (point, spot) => {
     modal.open({
       variant: 'side',

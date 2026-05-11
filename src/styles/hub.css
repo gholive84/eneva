@@ -34,7 +34,7 @@
   margin: 0;
   width: 1152px;
   max-width: 100%;
-  aspect-ratio: 1703 / 814;
+  aspect-ratio: 8001 / 4319;
   overflow: hidden;
   border-radius: var(--radius-md);
 }
@@ -108,7 +108,27 @@
   transition: filter 0.45s var(--ease, ease);
 }
 .hub__canvas-inner.is-zoomed .hub__image--bg {
-  filter: blur(10px);
+  filter: blur(10px) brightness(0.55);
+}
+/* Borda fina ao redor do spot — desenhada como ::after da camada interna,
+   posicionada nas mesmas coords do clip-path. */
+.hub__canvas-inner::after {
+  content: '';
+  position: absolute;
+  width: 32%;
+  aspect-ratio: 1;
+  left: var(--zoom-x, 50%);
+  top: var(--zoom-y, 50%);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s var(--ease, ease);
+  z-index: 2;
+}
+.hub__canvas-inner.is-zoomed::after {
+  opacity: 1;
 }
 /* Camada "spotlight" — mesma imagem em cima, sem blur, revelada
    radialmente em volta do ponto clicado (zoom-x/zoom-y setados via JS). */
@@ -118,13 +138,13 @@
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.35s var(--ease, ease);
-  clip-path: ellipse(0% 0% at var(--zoom-x, 50%) var(--zoom-y, 50%));
-  -webkit-clip-path: ellipse(0% 0% at var(--zoom-x, 50%) var(--zoom-y, 50%));
+  clip-path: circle(0% at var(--zoom-x, 50%) var(--zoom-y, 50%));
+  -webkit-clip-path: circle(0% at var(--zoom-x, 50%) var(--zoom-y, 50%));
 }
 .hub__canvas-inner.is-zoomed .hub__image--spot {
   opacity: 1;
-  clip-path: ellipse(15% 28% at var(--zoom-x, 50%) var(--zoom-y, 50%));
-  -webkit-clip-path: ellipse(15% 28% at var(--zoom-x, 50%) var(--zoom-y, 50%));
+  clip-path: circle(19% at var(--zoom-x, 50%) var(--zoom-y, 50%));
+  -webkit-clip-path: circle(19% at var(--zoom-x, 50%) var(--zoom-y, 50%));
   transition: opacity 0.35s var(--ease, ease),
               clip-path 0.45s var(--ease-spring, cubic-bezier(.22,1,.36,1));
 }

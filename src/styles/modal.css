@@ -51,19 +51,19 @@
   position: fixed;
   inset: 0;
   pointer-events: none;
-  background: rgba(15, 26, 27, 0.22);
+  background: rgba(15, 26, 27, 0.55);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   -webkit-mask-image: radial-gradient(
-    ellipse 260px 310px at var(--spot-x, 50%) var(--spot-y, 50%),
+    circle 280px at var(--spot-x, 50%) var(--spot-y, 50%),
     transparent 0%,
-    transparent 72%,
+    transparent 99%,
     #000 100%
   );
           mask-image: radial-gradient(
-    ellipse 260px 310px at var(--spot-x, 50%) var(--spot-y, 50%),
+    circle 280px at var(--spot-x, 50%) var(--spot-y, 50%),
     transparent 0%,
-    transparent 72%,
+    transparent 99%,
     #000 100%
   );
   opacity: 0;
@@ -71,6 +71,26 @@
   z-index: 0;
 }
 .modal-overlay--side.is-open::before {
+  opacity: 1;
+}
+/* Borda fina no perímetro do spot do modal */
+.modal-overlay--side::after {
+  content: '';
+  position: fixed;
+  width: 560px;
+  height: 560px;
+  left: var(--spot-x, 50%);
+  top: var(--spot-y, 50%);
+  margin-left: -280px;
+  margin-top: -280px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease);
+  z-index: 2;
+}
+.modal-overlay--side.is-open::after {
   opacity: 1;
 }
 .modal-overlay--side .modal--side {
