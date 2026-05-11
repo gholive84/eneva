@@ -48,16 +48,16 @@
   will-change: transform;
 }
 .hub__canvas-inner.is-zoomed {
-  transform: scale(2.2);
+  transform: scale(3.2);
 }
 /* Hotspots ficam dentro do inner zoomado — contra-escala para manter tamanho.
    transform-origin no centro do hotspot (ele já é centralizado por margin negativa). */
 .hub__canvas-inner.is-zoomed .hub__hotspot {
-  transform: scale(0.4545);
+  transform: scale(0.3125);
   transform-origin: 50% 50%;
 }
 .hub__canvas-inner.is-zoomed .hub__hotspot:hover {
-  transform: scale(0.5);
+  transform: scale(0.35);
 }
 .hub__hotspot {
   transition: transform 0.4s var(--ease-spring, cubic-bezier(.22,1,.36,1));
@@ -102,6 +102,31 @@
   object-fit: contain;
   user-select: none;
   -webkit-user-drag: none;
+}
+/* Camada base que recebe blur quando o canvas está zoomado */
+.hub__image--bg {
+  transition: filter 0.45s var(--ease, ease);
+}
+.hub__canvas-inner.is-zoomed .hub__image--bg {
+  filter: blur(10px);
+}
+/* Camada "spotlight" — mesma imagem em cima, sem blur, revelada
+   radialmente em volta do ponto clicado (zoom-x/zoom-y setados via JS). */
+.hub__image--spot {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s var(--ease, ease);
+  clip-path: ellipse(0% 0% at var(--zoom-x, 50%) var(--zoom-y, 50%));
+  -webkit-clip-path: ellipse(0% 0% at var(--zoom-x, 50%) var(--zoom-y, 50%));
+}
+.hub__canvas-inner.is-zoomed .hub__image--spot {
+  opacity: 1;
+  clip-path: ellipse(15% 28% at var(--zoom-x, 50%) var(--zoom-y, 50%));
+  -webkit-clip-path: ellipse(15% 28% at var(--zoom-x, 50%) var(--zoom-y, 50%));
+  transition: opacity 0.35s var(--ease, ease),
+              clip-path 0.45s var(--ease-spring, cubic-bezier(.22,1,.36,1));
 }
 
 /* Hotspots — pontos clicáveis animados */

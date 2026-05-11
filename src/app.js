@@ -47,7 +47,7 @@ let hubInstance;
 hubInstance = mountHub(document.getElementById('panel-hub'), {
   points: hubPoints,
   imageSrc: 'assets/hub-eneva.png',
-  onSelect: (point) => {
+  onSelect: (point, spot) => {
     modal.open({
       variant: 'side',
       eyebrow: 'Hub Eneva',
@@ -56,6 +56,7 @@ hubInstance = mountHub(document.getElementById('panel-hub'), {
       hero: point.hero,
       bodyHTML: point.body,
       media: point.media || [],
+      spotAt: spot,
       onClose: () => hubInstance && hubInstance.resetZoom()
     });
   }

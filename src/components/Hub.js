@@ -39,7 +39,16 @@ export function mountHub(container, { points, imageSrc = 'assets/HUB.png', onSel
     currentPulsingSeq = nextSeqAfter(point.seq);
     zoomedSeq = point.seq;
     refresh();
-    if (onSelect) onSelect(point);
+    if (onSelect) onSelect(point, getSpotViewportPosition(point));
+  }
+
+  function getSpotViewportPosition(point) {
+    if (!canvas) return null;
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: rect.left + (point.x / 100) * rect.width,
+      y: rect.top + (point.y / 100) * rect.height
+    };
   }
 
   function resetZoom() {
@@ -52,6 +61,8 @@ export function mountHub(container, { points, imageSrc = 'assets/HUB.png', onSel
     const p = zoomedSeq != null ? pointBySeq.get(zoomedSeq) : null;
     if (p) {
       canvasInner.style.transformOrigin = `${p.x}% ${p.y}%`;
+      canvasInner.style.setProperty('--zoom-x', `${p.x}%`);
+      canvasInner.style.setProperty('--zoom-y', `${p.y}%`);
       canvasInner.classList.add('is-zoomed');
       resetBtn.classList.add('is-visible');
     } else {
@@ -102,11 +113,18 @@ export function mountHub(container, { points, imageSrc = 'assets/HUB.png', onSel
 
   const canvasInner = h('div', { className: 'hub__canvas-inner' }, [
     h('img', {
-      className: 'hub__image',
+      className: 'hub__image hub__image--bg',
       src: imageSrc,
       alt: 'Hub Eneva — cadeia integrada de energia',
       loading: 'eager',
       onError: (e) => { e.target.style.opacity = '0.3'; }
+    }),
+    h('img', {
+      className: 'hub__image hub__image--spot',
+      src: imageSrc,
+      alt: '',
+      'aria-hidden': 'true',
+      loading: 'eager'
     })
   ]);
   canvasInner.appendChild(svg);

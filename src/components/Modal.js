@@ -83,6 +83,11 @@ export function createModal(rootEl) {
       ])
     ]);
 
+    if (payload.spotAt && typeof payload.spotAt.x === 'number') {
+      overlay.style.setProperty('--spot-x', `${payload.spotAt.x}px`);
+      overlay.style.setProperty('--spot-y', `${payload.spotAt.y}px`);
+    }
+
     rootEl.appendChild(overlay);
     overlay.addEventListener('click', onOverlayClick);
     document.addEventListener('keydown', onKeydown);

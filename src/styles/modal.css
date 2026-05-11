@@ -40,9 +40,42 @@
 .modal-overlay--side {
   place-items: stretch end;
   padding: 0;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+/* Camada de blur que cobre o fundo todo, com "furo" radial no spot
+   (vars --spot-x / --spot-y setadas em pixels pelo Modal.js). */
+.modal-overlay--side::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
   background: rgba(15, 26, 27, 0.22);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  -webkit-mask-image: radial-gradient(
+    ellipse 260px 310px at var(--spot-x, 50%) var(--spot-y, 50%),
+    transparent 0%,
+    transparent 72%,
+    #000 100%
+  );
+          mask-image: radial-gradient(
+    ellipse 260px 310px at var(--spot-x, 50%) var(--spot-y, 50%),
+    transparent 0%,
+    transparent 72%,
+    #000 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s var(--ease);
+  z-index: 0;
+}
+.modal-overlay--side.is-open::before {
+  opacity: 1;
+}
+.modal-overlay--side .modal--side {
+  position: relative;
+  z-index: 1;
 }
 .modal-overlay--side .modal--side {
   width: min(520px, 100%);
@@ -102,15 +135,15 @@
   padding: 28px 28px 24px;
   color: #FFFFFF;
 }
-.modal__eyebrow--on-hero {
+.modal__eyebrow.modal__eyebrow--on-hero {
   color: #FFFFFF;
   opacity: 0.92;
 }
-.modal__eyebrow--on-hero .modal__eyebrow-num {
+.modal__eyebrow.modal__eyebrow--on-hero .modal__eyebrow-num {
   background: var(--eneva-teal);
   color: #FFFFFF;
 }
-.modal__title--on-hero {
+.modal__title.modal__title--on-hero {
   color: #FFFFFF;
   font-size: 30px;
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
