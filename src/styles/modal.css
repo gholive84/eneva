@@ -36,6 +36,33 @@
   opacity: 1;
 }
 
+/* ── Variante: side drawer (slide da direita) ─────────────────── */
+.modal-overlay--side {
+  place-items: stretch end;
+  padding: 0;
+  background: rgba(15, 26, 27, 0.22);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+.modal-overlay--side .modal--side {
+  width: min(520px, 100%);
+  max-height: 100vh;
+  height: 100vh;
+  border-radius: 0;
+  transform: translateX(100%);
+  opacity: 1;
+  transition: transform 0.4s var(--ease-spring);
+}
+.modal-overlay--side.is-open .modal--side {
+  transform: translateX(0);
+}
+.modal-overlay--side .modal--side .modal__hero {
+  aspect-ratio: 16/10;
+}
+@media (max-width: 600px) {
+  .modal-overlay--side .modal--side { width: 100%; }
+}
+
 .modal__header {
   display: flex;
   align-items: center;

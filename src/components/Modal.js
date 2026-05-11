@@ -16,14 +16,21 @@ import { linkifyGlossary } from '../utils/glossary-link.js';
 export function createModal(rootEl) {
   let overlay = null;
   let lastFocus = null;
+  let currentOnClose = null;
 
   function open(payload) {
     close({ instant: true });
     lastFocus = document.activeElement;
+    currentOnClose = typeof payload.onClose === 'function' ? payload.onClose : null;
 
-    overlay = h('div', { className: 'modal-overlay', role: 'presentation' }, [
+    const overlayClass =
+      'modal-overlay' + (payload.variant === 'side' ? ' modal-overlay--side' : '');
+    const modalBase = payload.hero ? 'modal modal--with-hero' : 'modal';
+    const modalClass = modalBase + (payload.variant === 'side' ? ' modal--side' : '');
+
+    overlay = h('div', { className: overlayClass, role: 'presentation' }, [
       h('div', {
-        className: payload.hero ? 'modal modal--with-hero' : 'modal',
+        className: modalClass,
         role: 'dialog',
         'aria-modal': 'true',
         'aria-labelledby': 'modal-title'
@@ -94,6 +101,9 @@ export function createModal(rootEl) {
     document.removeEventListener('keydown', onKeydown);
     overlay.removeEventListener('click', onOverlayClick);
 
+    const fireOnClose = instant ? null : currentOnClose;
+    currentOnClose = null;
+
     if (instant) {
       overlay.remove();
       overlay = null;
@@ -107,9 +117,10 @@ export function createModal(rootEl) {
     overlay = null;
     setTimeout(() => {
       if (node.parentNode) node.remove();
-    }, 280);
+    }, 320);
     document.body.style.overflow = '';
     if (lastFocus && lastFocus.focus) lastFocus.focus();
+    if (fireOnClose) fireOnClose();
   }
 
   function onOverlayClick(e) {

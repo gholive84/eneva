@@ -25,6 +25,7 @@ export function mountHub(container, { points, imageSrc = 'assets/HUB.png', onSel
   // Inicialmente: o primeiro ponto pulsa, sem linha desenhada.
   let currentPulsingSeq = seqList[0];
   let lastClickedSeq = null;
+  let zoomedSeq = null;
 
   function nextSeqAfter(seq) {
     const idx = seqList.indexOf(seq);
@@ -36,8 +37,27 @@ export function mountHub(container, { points, imageSrc = 'assets/HUB.png', onSel
   function handleSelect(point) {
     lastClickedSeq = point.seq;
     currentPulsingSeq = nextSeqAfter(point.seq);
+    zoomedSeq = point.seq;
     refresh();
     if (onSelect) onSelect(point);
+  }
+
+  function resetZoom() {
+    zoomedSeq = null;
+    applyZoom();
+  }
+
+  function applyZoom() {
+    if (!canvasInner) return;
+    const p = zoomedSeq != null ? pointBySeq.get(zoomedSeq) : null;
+    if (p) {
+      canvasInner.style.transformOrigin = `${p.x}% ${p.y}%`;
+      canvasInner.classList.add('is-zoomed');
+      resetBtn.classList.add('is-visible');
+    } else {
+      canvasInner.classList.remove('is-zoomed');
+      resetBtn.classList.remove('is-visible');
+    }
   }
 
   function refresh() {
@@ -47,6 +67,7 @@ export function mountHub(container, { points, imageSrc = 'assets/HUB.png', onSel
       el.classList.toggle('is-clicked', seq === lastClickedSeq);
     });
     drawConnector();
+    applyZoom();
   }
 
   function drawConnector() {
@@ -79,7 +100,7 @@ export function mountHub(container, { points, imageSrc = 'assets/HUB.png', onSel
   svgLine.style.opacity = '0';
   svg.appendChild(svgLine);
 
-  const canvas = h('div', { className: 'hub__canvas' }, [
+  const canvasInner = h('div', { className: 'hub__canvas-inner' }, [
     h('img', {
       className: 'hub__image',
       src: imageSrc,
@@ -88,8 +109,17 @@ export function mountHub(container, { points, imageSrc = 'assets/HUB.png', onSel
       onError: (e) => { e.target.style.opacity = '0.3'; }
     })
   ]);
-  canvas.appendChild(svg);
-  for (const p of points) canvas.appendChild(renderHotspot(p, handleSelect));
+  canvasInner.appendChild(svg);
+  for (const p of points) canvasInner.appendChild(renderHotspot(p, handleSelect));
+
+  const resetBtn = h('button', {
+    className: 'hub__zoom-reset',
+    type: 'button',
+    'aria-label': 'Resetar zoom',
+    onClick: () => resetZoom()
+  }, ['↺ Ver tudo']);
+
+  const canvas = h('div', { className: 'hub__canvas' }, [canvasInner, resetBtn]);
 
   const root = h('div', { className: 'hub' }, [
     h('header', { className: 'hub__head' }, [
@@ -109,6 +139,7 @@ export function mountHub(container, { points, imageSrc = 'assets/HUB.png', onSel
   refresh();
 
   return {
+    resetZoom,
     destroy() {}
   };
 }

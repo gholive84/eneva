@@ -43,16 +43,20 @@ mountTimeline(document.getElementById('panel-timeline'), {
 });
 
 // ── Hub ────────────────────────────────────────────────────────────
-mountHub(document.getElementById('panel-hub'), {
+let hubInstance;
+hubInstance = mountHub(document.getElementById('panel-hub'), {
   points: hubPoints,
   imageSrc: 'assets/hub-eneva.png',
   onSelect: (point) => {
     modal.open({
+      variant: 'side',
       eyebrow: 'Hub Eneva',
       eyebrowNum: point.seq,
       title: point.title,
+      hero: point.hero,
       bodyHTML: point.body,
-      media: point.media || []
+      media: point.media || [],
+      onClose: () => hubInstance && hubInstance.resetZoom()
     });
   }
 });
