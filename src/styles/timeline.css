@@ -126,23 +126,25 @@
 .timeline__track {
   position: relative;
   display: flex;
-  align-items: stretch;
+  align-items: flex-end;
   gap: 0;
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 80px 24px;
+  padding: 60px 24px 80px;
   scroll-behavior: smooth;
   scroll-snap-type: x proximity;
   scrollbar-width: none;
 }
 .timeline__track::-webkit-scrollbar { display: none; }
 
-/* Linha contínua com gradiente + progresso */
+/* Linha contínua com gradiente + progresso — alinhada com o year-pin (logo abaixo dos cards) */
 .timeline__rail {
   position: absolute;
   left: 24px;
   right: 24px;
-  top: 50%;
+  bottom: 80px;
+  top: auto;
+  transform: translateY(50%);
   height: 3px;
   background:
     repeating-linear-gradient(90deg,
@@ -167,16 +169,18 @@
 }
 
 /* ── Cada item da timeline ─────────────────────────────────────── */
-/* Grid de duas linhas iguais: card ocupa metade superior OU inferior,
-   year-pin/rail ficam exatamente na linha do meio (50%). */
+/* Card no topo (em fluxo) + year-pin/conector absolutos no bottom.
+   Como o track usa align-items: flex-end, todos os items têm o bottom
+   alinhado — logo o year-pin senta sempre no trilho, mesmo com alturas
+   diferentes entre as variantes (que criam o desnível visual desejado). */
 .timeline__item {
   position: relative;
   flex: 0 0 auto;
   width: 360px;
   scroll-snap-align: center;
-  display: grid;
-  grid-template-rows: 1fr 1fr;
   padding: 0 24px;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Cards alternam acima e abaixo do trilho */
@@ -210,16 +214,13 @@
 }
 
 /* Diferença vertical entre cards adjacentes — variante a fica mais alta,
-   variante b fica mais próxima do trilho. Mantém o year-pin sempre no rail. */
-.timeline__item--above {
-  --tl-gap: 44px;
-}
+   variante b mais próxima do trilho. Como o track usa flex-end, a margem
+   maior empurra o card para cima. */
+.timeline__item--above { --tl-gap: 44px; }
 .timeline__item--above.timeline__item--a { --tl-gap: 64px; }
 .timeline__item--above.timeline__item--b { --tl-gap: 28px; }
 
 .timeline__item--above .timeline__card {
-  grid-row: 1;
-  align-self: end;
   margin-bottom: var(--tl-gap);
 }
 
@@ -337,7 +338,7 @@
   z-index: 1;
 }
 .timeline__item--above .timeline__connector {
-  bottom: calc(50% + 17px);
+  bottom: 17px;
   height: calc(var(--tl-gap) - 17px);
 }
 
@@ -346,12 +347,13 @@
   display: none;
 }
 
-/* Year-pin posicionado EXATAMENTE sobre a rail (centro do item) */
+/* Year-pin posicionado EXATAMENTE sobre a rail (bottom do item, centro alinhado) */
 .timeline__year-pin {
   position: absolute;
   left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  bottom: 0;
+  top: auto;
+  transform: translate(-50%, 50%);
   z-index: 3;
   display: inline-flex;
   align-items: center;
@@ -387,7 +389,7 @@
   background: linear-gradient(180deg, var(--eneva-teal), var(--eneva-teal-700));
 }
 .timeline__item.is-active .timeline__year-pin {
-  transform: translate(-50%, -50%) scale(1.12);
+  transform: translate(-50%, 50%) scale(1.12);
   box-shadow:
     0 12px 28px rgba(0, 159, 166, 0.5),
     0 2px 6px rgba(15, 26, 27, 0.15),
