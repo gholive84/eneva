@@ -21,15 +21,33 @@ export function mountTimeline(container, { data, onSelect }) {
   const root = h('div', { className: 'timeline' });
   container.appendChild(root);
 
-  const head = renderHead({ scrollBy });
+  const head = renderHead();
   root.appendChild(head);
 
   const viewport = h('div', { className: 'timeline__viewport' });
   const track = h('div', { className: 'timeline__track', role: 'list' });
   const rail = h('div', { className: 'timeline__rail' });
   const hint = h('div', { className: 'timeline__hint' }, ['arraste →']);
+
+  const btnPrev = h('button', {
+    className: 'timeline__btn timeline__btn--side timeline__btn--prev',
+    type: 'button',
+    'aria-label': 'Voltar',
+    dataset: { dir: 'prev' },
+    onClick: () => scrollBy('prev')
+  }, [iconChevron('left')]);
+  const btnNext = h('button', {
+    className: 'timeline__btn timeline__btn--side timeline__btn--next',
+    type: 'button',
+    'aria-label': 'Avançar',
+    dataset: { dir: 'next' },
+    onClick: () => scrollBy('next')
+  }, [iconChevron('right')]);
+
   viewport.appendChild(rail);
   viewport.appendChild(track);
+  viewport.appendChild(btnPrev);
+  viewport.appendChild(btnNext);
   viewport.appendChild(hint);
   root.appendChild(viewport);
 
@@ -59,10 +77,8 @@ export function mountTimeline(container, { data, onSelect }) {
     items.forEach((it, idx) => it.classList.toggle('is-active', idx === bestIdx));
 
     // estado dos botões
-    const btnPrev = head.querySelector('[data-dir="prev"]');
-    const btnNext = head.querySelector('[data-dir="next"]');
-    if (btnPrev) btnPrev.disabled = track.scrollLeft <= 4;
-    if (btnNext) btnNext.disabled = track.scrollLeft >= max - 4;
+    btnPrev.disabled = track.scrollLeft <= 4;
+    btnNext.disabled = track.scrollLeft >= max - 4;
   };
 
   function scrollBy(dir) {
@@ -89,7 +105,7 @@ export function mountTimeline(container, { data, onSelect }) {
   };
 }
 
-function renderHead({ scrollBy }) {
+function renderHead() {
   return h('header', { className: 'timeline__head' }, [
     h('div', {}, [
       h('div', { className: 'timeline__eyebrow' }, ['Linha do tempo']),
@@ -97,22 +113,6 @@ function renderHead({ scrollBy }) {
       h('p', { className: 'timeline__subtitle' }, [
         'Marcos que construíram a Eneva — da fundação ao próximo capítulo da nossa jornada de energia.'
       ])
-    ]),
-    h('div', { className: 'timeline__controls' }, [
-      h('button', {
-        className: 'timeline__btn',
-        type: 'button',
-        'aria-label': 'Voltar',
-        dataset: { dir: 'prev' },
-        onClick: () => scrollBy('prev')
-      }, [iconChevron('left')]),
-      h('button', {
-        className: 'timeline__btn',
-        type: 'button',
-        'aria-label': 'Avançar',
-        dataset: { dir: 'next' },
-        onClick: () => scrollBy('next')
-      }, [iconChevron('right')])
     ])
   ]);
 }

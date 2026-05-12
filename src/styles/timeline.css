@@ -51,10 +51,6 @@
   max-width: 540px;
   line-height: 1.6;
 }
-.timeline__controls {
-  display: flex;
-  gap: 8px;
-}
 .timeline__btn {
   width: 48px;
   height: 48px;
@@ -65,15 +61,33 @@
   display: grid;
   place-items: center;
   transition: all 0.25s var(--ease);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
 }
 .timeline__btn:hover:not(:disabled) {
   border-color: var(--eneva-teal);
   color: var(--eneva-teal);
-  transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
 .timeline__btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* Flechas laterais do slider — flutuam sobre o viewport */
+.timeline__btn--side {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 6;
+  width: 52px;
+  height: 52px;
+  background: #FFFFFF;
+  box-shadow:
+    0 4px 12px rgba(15, 26, 27, 0.10),
+    0 12px 32px rgba(15, 26, 27, 0.12);
+}
+.timeline__btn--side:hover:not(:disabled) {
+  transform: translateY(-50%) scale(1.05);
+}
+.timeline__btn--prev { left: 12px; }
+.timeline__btn--next { right: 12px; }
 
 /* ── Viewport / Track ──────────────────────────────────────────── */
 .timeline__viewport {
@@ -102,10 +116,11 @@
 .timeline__track {
   position: relative;
   display: flex;
+  align-items: stretch;
   gap: 0;
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 100px 24px 80px;
+  padding: 80px 24px;
   scroll-behavior: smooth;
   scroll-snap-type: x proximity;
   scrollbar-width: none;
@@ -142,14 +157,15 @@
 }
 
 /* ── Cada item da timeline ─────────────────────────────────────── */
+/* Grid de duas linhas iguais: card ocupa metade superior OU inferior,
+   year-pin/rail ficam exatamente na linha do meio (50%). */
 .timeline__item {
   position: relative;
   flex: 0 0 auto;
   width: 360px;
   scroll-snap-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
   padding: 0 24px;
 }
 
@@ -183,8 +199,16 @@
   border-color: transparent;
 }
 
-.timeline__item--above .timeline__card { margin-bottom: 80px; }
-.timeline__item--below .timeline__card { margin-top: 80px; order: 2; }
+.timeline__item--above .timeline__card {
+  grid-row: 1;
+  align-self: end;
+  margin-bottom: 44px;
+}
+.timeline__item--below .timeline__card {
+  grid-row: 2;
+  align-self: start;
+  margin-top: 44px;
+}
 
 /* Hero da imagem com overlay gradiente para legibilidade */
 .timeline__card-hero {
@@ -299,8 +323,8 @@
   transition: background 0.3s var(--ease);
   z-index: 1;
 }
-.timeline__item--above .timeline__connector { bottom: calc(50% + 18px); height: 36px; }
-.timeline__item--below .timeline__connector { top: calc(50% + 18px); height: 36px; }
+.timeline__item--above .timeline__connector { bottom: calc(50% + 17px); height: 27px; }
+.timeline__item--below .timeline__connector { top: calc(50% + 17px); height: 27px; }
 
 /* Node antigo escondido — year-pin agora é o marcador na rail */
 .timeline__node {

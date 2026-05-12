@@ -91,6 +91,25 @@ export function mountGlossary(container, { data, highlight = null }) {
   const list = h('div', { className: 'glossary__list-root' });
   root.appendChild(list);
 
+  // ── Botão "voltar ao topo" ────────────────────────────────────
+  const backToTop = h('button', {
+    className: 'glossary__back-to-top',
+    type: 'button',
+    'aria-label': 'Voltar ao topo',
+    onClick: () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { input.focus({ preventScroll: true }); } catch (_) {}
+    }
+  }, [iconArrowUp(), h('span', { className: 'glossary__back-to-top-label' }, ['Topo'])]);
+  root.appendChild(backToTop);
+
+  const onScroll = () => {
+    const show = window.scrollY > 320;
+    backToTop.classList.toggle('is-visible', show);
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
   // ── Render ──────────────────────────────────────────────────────
   function render() {
     const q = normalize(state.query);
@@ -203,8 +222,16 @@ export function mountGlossary(container, { data, highlight = null }) {
   return {
     focusTerm,
     setHighlight(id) { highlight = id; if (id) focusTerm(id); },
-    destroy() {}
+    destroy() {
+      window.removeEventListener('scroll', onScroll);
+    }
   };
+}
+
+function iconArrowUp() {
+  const span = document.createElement('span');
+  span.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>`;
+  return span.firstElementChild;
 }
 
 function firstLetter(term) {
