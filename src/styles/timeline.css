@@ -76,18 +76,28 @@
   top: 50%;
   transform: translateY(-50%);
   z-index: 6;
-  width: 52px;
-  height: 52px;
+  width: 68px;
+  height: 68px;
   background: #FFFFFF;
   box-shadow:
-    0 4px 12px rgba(15, 26, 27, 0.10),
-    0 12px 32px rgba(15, 26, 27, 0.12);
+    0 6px 16px rgba(15, 26, 27, 0.12),
+    0 18px 40px rgba(15, 26, 27, 0.14);
+}
+.timeline__btn--side svg {
+  width: 24px;
+  height: 24px;
+  stroke-width: 2.2;
 }
 .timeline__btn--side:hover:not(:disabled) {
-  transform: translateY(-50%) scale(1.05);
+  transform: translateY(-50%) scale(1.06);
 }
 .timeline__btn--prev { left: 12px; }
 .timeline__btn--next { right: 12px; }
+
+@media (max-width: 720px) {
+  .timeline__btn--side { width: 52px; height: 52px; }
+  .timeline__btn--side svg { width: 20px; height: 20px; }
+}
 
 /* ── Viewport / Track ──────────────────────────────────────────── */
 .timeline__viewport {
@@ -199,15 +209,18 @@
   border-color: transparent;
 }
 
+/* Diferença vertical entre cards adjacentes — variante a fica mais alta,
+   variante b fica mais próxima do trilho. Mantém o year-pin sempre no rail. */
+.timeline__item--above {
+  --tl-gap: 44px;
+}
+.timeline__item--above.timeline__item--a { --tl-gap: 64px; }
+.timeline__item--above.timeline__item--b { --tl-gap: 28px; }
+
 .timeline__item--above .timeline__card {
   grid-row: 1;
   align-self: end;
-  margin-bottom: 44px;
-}
-.timeline__item--below .timeline__card {
-  grid-row: 2;
-  align-self: start;
-  margin-top: 44px;
+  margin-bottom: var(--tl-gap);
 }
 
 /* Hero da imagem com overlay gradiente para legibilidade */
@@ -323,8 +336,10 @@
   transition: background 0.3s var(--ease);
   z-index: 1;
 }
-.timeline__item--above .timeline__connector { bottom: calc(50% + 17px); height: 27px; }
-.timeline__item--below .timeline__connector { top: calc(50% + 17px); height: 27px; }
+.timeline__item--above .timeline__connector {
+  bottom: calc(50% + 17px);
+  height: calc(var(--tl-gap) - 17px);
+}
 
 /* Node antigo escondido — year-pin agora é o marcador na rail */
 .timeline__node {

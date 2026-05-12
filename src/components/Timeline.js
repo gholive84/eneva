@@ -51,10 +51,10 @@ export function mountTimeline(container, { data, onSelect }) {
   viewport.appendChild(hint);
   root.appendChild(viewport);
 
-  // Render dos itens
+  // Render dos itens — todos acima do trilho, com leve variação vertical
   const items = data.map((evt, i) => {
-    const position = i % 2 === 0 ? 'above' : 'below';
-    const item = renderItem(evt, position, onSelect);
+    const variant = i % 2 === 0 ? 'a' : 'b';
+    const item = renderItem(evt, variant, onSelect);
     track.appendChild(item);
     return item;
   });
@@ -117,7 +117,7 @@ function renderHead() {
   ]);
 }
 
-function renderItem(evt, position, onSelect) {
+function renderItem(evt, variant, onSelect) {
   const mediaCount = evt.media?.length || 0;
 
   const card = h('button', {
@@ -158,15 +158,11 @@ function renderItem(evt, position, onSelect) {
   const yearPin = h('span', { className: 'timeline__year-pin' }, [evt.year]);
   const connector = h('span', { className: 'timeline__connector' });
 
-  // ordem de filhos depende de above/below (CSS controla visualmente)
   return h('div', {
-    className: `timeline__item timeline__item--${position}`,
+    className: `timeline__item timeline__item--above timeline__item--${variant}`,
     role: 'listitem',
     dataset: { id: evt.id }
-  }, position === 'above'
-    ? [card, connector, node, yearPin]
-    : [node, yearPin, connector, card]
-  );
+  }, [card, connector, node, yearPin]);
 }
 
 function enableDragScroll(track) {
